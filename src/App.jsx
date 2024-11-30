@@ -6,6 +6,7 @@ import MainLayouts from "./layouts/MainLayouts";
 // pages
 import Home from "./pages/Home";
 import Create from "./pages/Create";
+import ReadTodo from "./pages/ReadTodo";
 
 //Lokocrotiy
 const getTodosLocalStorage = () => {
@@ -16,6 +17,17 @@ function App() {
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
+  const editTodoChange = (to) => {
+    setTodos((prev) => {
+      return prev.map((todo) => {
+        if (todo.id == to.id) {
+          return { ...to };
+        } else {
+          return todo;
+        }
+      });
+    });
+  };
   const router = createBrowserRouter([
     {
       path: "/",
@@ -23,11 +35,21 @@ function App() {
       children: [
         {
           index: true,
-          element: <Home todos={todos} setTodos={setTodos} />,
+          element: (
+            <Home
+              editTodoChange={editTodoChange}
+              todos={todos}
+              setTodos={setTodos}
+            />
+          ),
         },
         {
           path: "/create",
           element: <Create setTodos={setTodos} />,
+        },
+        {
+          path: "/read/:id",
+          element: <ReadTodo todos={todos} />,
         },
       ],
     },

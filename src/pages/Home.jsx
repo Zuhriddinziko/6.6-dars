@@ -1,8 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { MdModeEditOutline } from "react-icons/md";
+import Madal from "../components/Madal";
+import { useState } from "react";
 
-function Home({ todos, setTodos }) {
+function Home({ todos, setTodos, editTodoChange }) {
+  const [todoId, setTodoId] = useState(null);
+  const [todo, setTodo] = useState(null);
   const todosDelete = (id) => {
     setTodos((prev) => {
       return prev.filter((us) => {
@@ -14,6 +19,7 @@ function Home({ todos, setTodos }) {
     <>
       <div className="mx-auto my-10 grid max-w-5xl">
         <ul className="grid grid-cols-3 gap-8">
+          <Madal t={todo} editTodoChange={editTodoChange} />
           {todos.map((todo) => {
             return (
               <li
@@ -24,11 +30,21 @@ function Home({ todos, setTodos }) {
                   <h2 className="card-title">{todo.title}</h2>
                   <p>{todo.description.slice(0, 60)}...</p>
                   <div className="card-actions items-center justify-end">
-                    <Link
-                      to="/"
+                    <button
+                      onClick={() => {
+                        setTodoId(todo.id);
+                        setTodo(todo);
+                        document.getElementById("my_modal_5").showModal();
+                      }}
                       className="btn btn-primary btn-sm transition-all duration-500 hover:bg-blue-200 hover:text-black"
                     >
-                      Buy Now
+                      <MdModeEditOutline />
+                    </button>
+                    <Link
+                      to={`/read/${todo.id}`}
+                      className="btn btn-primary btn-sm transition-all duration-500 hover:bg-blue-200 hover:text-black"
+                    >
+                      Read
                     </Link>
                     <FaRegTrashAlt
                       onClick={() => todosDelete(todo.id)}
