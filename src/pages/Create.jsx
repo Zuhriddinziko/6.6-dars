@@ -4,9 +4,26 @@ import { useNavigate } from "react-router-dom";
 function Create({ setTodos }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [errors, setErrors] = useState({});
+
   const navigete = useNavigate();
+  const validate = () => {
+    const newErrors = {};
+    if (!title.trim()) {
+      newErrors.title = "Title kiritilishi shart!";
+      alert("        Title kiritilishi shart!    ");
+    }
+    if (!description.trim()) {
+      newErrors.description = "Description kiritilishi shart!";
+      alert("     Description kiritilishi shart!  ");
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const hendleSubmit = (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setTodos((prev) => {
       return [
         ...prev,
@@ -34,7 +51,7 @@ function Create({ setTodos }) {
             placeholder="Title"
             value={title}
             className="input input-bordered w-full"
-            required
+            // required
           />
         </label>
         <label className="form-control mb-5 w-full">
@@ -44,7 +61,7 @@ function Create({ setTodos }) {
             className="textarea textarea-bordered my-2 w-full"
             placeholder="Description"
             value={description}
-            required
+            // required
           ></textarea>
         </label>
         <button className="btn btn-primary btn-block">Add </button>
